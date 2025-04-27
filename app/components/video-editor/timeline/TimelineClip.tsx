@@ -1,11 +1,32 @@
-'use client';
+"use client";
 
 import { useRef } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop, DropTargetMonitor } from 'react-dnd';
+import { useDispatch } from 'react-redux';
+import { addScene, removeScene } from '../../../lib/redux/slices/videoSlice';
 
-export default function TimelineClip({ clip, index, isSelected, onSelect, moveClip }) {
-  const ref = useRef(null);
-  
+interface DragItem {
+  index: number;
+  type: string;
+}
+
+interface TimelineClipProps {
+  clip: {
+    id: string;
+    name?: string;
+    duration: number;
+    thumbnail?: string;
+  };
+  index: number;
+  isSelected: boolean;
+  onSelect: () => void;
+  moveClip: (fromIndex: number, toIndex: number) => void;
+}
+
+export default function TimelineClip({ clip, index, isSelected, onSelect, moveClip }: TimelineClipProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+
   const [{ isDragging }, drag] = useDrag({
     type: 'CLIP',
     item: { index },
@@ -13,7 +34,7 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
       isDragging: monitor.isDragging(),
     }),
   });
-  
+
   const [{ handlerId }, drop] = useDrop({
     accept: 'CLIP',
     collect(monitor) {
@@ -21,59 +42,62 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
         handlerId: monitor.getHandlerId(),
       }
     },
-    hover(item, monitor) {
+    hover(item: DragItem, monitor: DropTargetMonitor) {
       if (!ref.current) {
         return;
       }
       const dragIndex = item.index;
       const hoverIndex = index;
-      
-      // Don't replace items with themselves
+
       if (dragIndex === hoverIndex) {
         return;
       }
-      
-      // Determine rectangle on screen
+
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      
-      // Get vertical middle
       const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      
-      // Determine mouse position
       const clientOffset = monitor.getClientOffset();
-      
-      // Get pixels to the top
+      if (!clientOffset) {
+        return;
+      }
       const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
-      
-      // Dragging downwards
+
       if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
         return;
       }
-      
-      // Dragging upwards
+
       if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
         return;
       }
-      
-      // Time to actually perform the action
+
       moveClip(dragIndex, hoverIndex);
-      
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
       item.index = hoverIndex;
     },
   });
-  
+
   drag(drop(ref));
-  
+
+  const handleAddScene = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    dispatch(addScene(clip.id));
+  };
+
+  const handleRemoveScene = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    dispatch(removeScene(clip.id));
+  };
+
+  const handleCut = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    alert('Cut function is a mock and not implemented.');
+  };
+
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    alert('Edit function is a mock and not implemented.');
+  };
+
   return (
-    <div 
+    <div
       ref={ref}
       className={`
         flex items-center p-2 rounded cursor-move transition-colors
@@ -90,15 +114,46 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
           )}
         </div>
       </div>
-      
+
       <div className="flex-grow h-6 bg-slate-700 rounded overflow-hidden relative">
-        <div 
+        <div
           className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30"
           style={{ width: `${clip.duration / 10 * 100}%` }}
         />
         <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-white">
           {clip.name || `Clip ${index + 1}`}
         </span>
+      </div>
+
+      <div className="ml-4 flex space-x-1">
+        <button
+          onClick={handleAddScene}
+          className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded"
+          title="Add Scene"
+        >
+          Add Scene
+        </button>
+        <button
+          onClick={handleRemoveScene}
+          className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded"
+          title="Remove Scene"
+        >
+          Remove Scene
+        </button>
+        <button
+          onClick={handleCut}
+          className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded"
+          title="Cut"
+        >
+          Cut
+        </button>
+        <button
+          onClick={handleEdit}
+          className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded"
+          title="Edit"
+        >
+          Edit
+        </button>
       </div>
     </div>
   );

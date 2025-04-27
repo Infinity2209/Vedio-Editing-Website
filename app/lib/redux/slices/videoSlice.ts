@@ -50,8 +50,35 @@ const videoSlice = createSlice({
     setDuration(state, action: PayloadAction<number>) {
       state.duration = action.payload;
     },
+    addScene(state, action: PayloadAction<string>) {
+      // Mock splitting clip by id into two clips
+      const clipIndex = state.videoClips.findIndex(c => c.id === action.payload);
+      if (clipIndex === -1) return;
+
+      const clip = state.videoClips[clipIndex];
+      const halfDuration = clip.duration / 2;
+
+      const newClip1 = { ...clip, id: clip.id + '-1', duration: halfDuration };
+      const newClip2 = { ...clip, id: clip.id + '-2', duration: halfDuration };
+
+      state.videoClips.splice(clipIndex, 1, newClip1, newClip2);
+    },
+    removeScene(state, action: PayloadAction<string>) {
+      // Remove clip by id
+      state.videoClips = state.videoClips.filter(c => c.id !== action.payload);
+    },
   },
 });
 
-export const { addVideo, removeVideo, setVideoClips, moveClip, selectClip, setCurrentTime, setDuration } = videoSlice.actions;
+export const {
+  addVideo,
+  removeVideo,
+  setVideoClips,
+  moveClip,
+  selectClip,
+  setCurrentTime,
+  setDuration,
+  addScene,
+  removeScene,
+} = videoSlice.actions;
 export default videoSlice.reducer;
