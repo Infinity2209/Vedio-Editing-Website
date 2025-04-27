@@ -1,13 +1,22 @@
 "use client";
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ChangeEvent, DragEvent } from 'react';
+import { useDispatch } from 'react-redux';
+import { addVideo } from '../../../lib/redux/slices/videoSlice';
+
+interface FileWithPreview extends File {
+  preview: string;
+}
 
 const Upload = () => {
-  const [files, setFiles] = useState([]);
-  const [uploadProgress, setUploadProgress] = useState({});
-  const fileInputRef = useRef(null);
+  const dispatch = useDispatch();
+  const [files, setFiles] = useState<FileWithPreview[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleFiles = (selectedFiles) => {
+  const handleFiles = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return;
+
     const videoFiles = Array.from(selectedFiles).filter(file =>
       ['video/mp4', 'video/webm', 'video/ogg'].includes(file.type)
     );
@@ -16,7 +25,7 @@ const Upload = () => {
       alert('Some files were rejected. Only mp4, webm, and ogg video formats are allowed.');
     }
 
-    const mappedFiles = videoFiles.map(file =>
+    const mappedFiles: FileWithPreview[] = videoFiles.map(file =>
       Object.assign(file, {
         preview: URL.createObjectURL(file)
       })
@@ -28,9 +37,10 @@ const Upload = () => {
       setUploadProgress(prev => ({ ...prev, [file.name]: 0 }));
       const interval = setInterval(() => {
         setUploadProgress(prev => {
-          const newProgress = prev[file.name] + 10;
+          const newProgress = (prev[file.name] || 0) + 10;
           if (newProgress >= 100) {
             clearInterval(interval);
+            dispatch(addVideo(file.preview));
             return { ...prev, [file.name]: 100 };
           }
           return { ...prev, [file.name]: newProgress };
@@ -39,16 +49,16 @@ const Upload = () => {
     });
   };
 
-  const onInputChange = (e) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     handleFiles(e.target.files);
   };
 
-  const onDrop = (e) => {
+  const onDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     handleFiles(e.dataTransfer.files);
   };
 
-  const onDragOver = (e) => {
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   };
 
@@ -67,6 +77,7 @@ const Upload = () => {
           ref={fileInputRef}
           onChange={onInputChange}
           className="hidden"
+          aria-label="Upload video files"
         />
         <p>Drag & drop video files here, or click to select files</p>
       </div>
