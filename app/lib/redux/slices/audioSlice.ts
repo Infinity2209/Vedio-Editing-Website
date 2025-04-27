@@ -34,8 +34,13 @@ const audioSlice = createSlice({
     removeAudioTrack(state, action: PayloadAction<string>) {
       state.audioTracks = state.audioTracks.filter(t => t.id !== action.payload);
     },
+    moveAudioTrack(state, action: PayloadAction<{ fromIndex: number; toIndex: number }>) {
+      const { fromIndex, toIndex } = action.payload;
+      const [movedTrack] = state.audioTracks.splice(fromIndex, 1);
+      state.audioTracks.splice(toIndex, 0, movedTrack);
+    },
   },
 });
 
-export const { addAudioTrack, updateAudioTrack, removeAudioTrack } = audioSlice.actions;
+export const { addAudioTrack, updateAudioTrack, removeAudioTrack, moveAudioTrack } = audioSlice.actions;
 export default audioSlice.reducer;
