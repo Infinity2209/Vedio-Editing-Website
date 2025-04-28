@@ -1,13 +1,13 @@
 'use client';
 
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCurrentTime } from '../../../lib/redux/slices/videoSlice';
-import { useEffect, useRef, useState } from 'react';
 
 export default function Preview() {
   const dispatch = useDispatch();
-  const videoRef = useRef(null);
-  const { video, currentTime, duration } = useSelector((state: any) => state.video);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const { videos, currentTime, duration } = useSelector((state: any) => state.video);
   const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
@@ -32,16 +32,18 @@ export default function Preview() {
     }
   };
 
-  if (!video) {
-    // Return empty div instead of "No video loaded" message
-    return "";
+  if (!videos || videos.length === 0) {
+    // Return null if no videos available
+    return null;
   }
+
+  const videoUrl = videos[0];
 
   return (
     <div className="relative bg-gradient-to-br from-indigo-300 via-purple-300 to-pink-300 rounded-lg overflow-hidden shadow-md ring-1 ring-indigo-400 animate-fadeIn max-h-[400px]">
       <video
         ref={videoRef}
-        src={video.url}
+        src={videoUrl}
         className="w-full h-auto rounded-md shadow-md"
         onTimeUpdate={handleTimeUpdate}
         onEnded={() => setIsPlaying(false)}

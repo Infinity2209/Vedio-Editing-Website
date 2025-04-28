@@ -104,13 +104,18 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
         ${isSelected ? 'bg-blue-900/30 border border-blue-500' : 'bg-slate-800 hover:bg-slate-700'}
         ${isDragging ? 'opacity-50' : 'opacity-100'}
       `}
-      onClick={onSelect}
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        onSelect();
+      }}
+      onDragStart={(e) => e.preventDefault()}
       data-handler-id={handlerId}
     >
       <div className="w-12 flex-shrink-0">
         <div className="w-10 h-6 bg-slate-700 rounded overflow-hidden">
           {clip.thumbnail && (
-            <img src={clip.thumbnail} alt="Clip thumbnail" className="w-full h-full object-cover" />
+            <img src={clip.thumbnail} alt="Clip thumbnail" className="w-full h-full object-cover" draggable={false} onDragStart={(e) => e.preventDefault()} />
           )}
         </div>
       </div>

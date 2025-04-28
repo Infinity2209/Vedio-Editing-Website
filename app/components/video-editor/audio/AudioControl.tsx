@@ -109,7 +109,8 @@ function DraggableAudioTrack({ track, index, moveTrack, onMuteToggle, onVolumeCh
 
 export default function AudioControl() {
   const dispatch = useDispatch();
-  const { audioTracks } = useSelector((state: any) => state.audio);
+  import { RootState } from '../../../lib/redux/store';
+  const audioTracks = useSelector((state: RootState) => state.audio.audioTracks ?? []);
   const [backgroundMusic, setBackgroundMusic] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
