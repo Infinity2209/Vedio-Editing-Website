@@ -107,10 +107,11 @@ function DraggableAudioTrack({ track, index, moveTrack, onMuteToggle, onVolumeCh
   );
 }
 
+import { RootState } from '../../../lib/redux/store';
+
 export default function AudioControl() {
   const dispatch = useDispatch();
-  import { RootState } from '../../../lib/redux/store';
-  const audioTracks = useSelector((state: RootState) => state.audio.audioTracks ?? []);
+  const audioTracks = useSelector((state: RootState) => state.audio?.audioTracks ?? []);
   const [backgroundMusic, setBackgroundMusic] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,7 +155,7 @@ export default function AudioControl() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="space-y-6">
+      <div className="space-y-6 mx-5">
         <h2 className="text-lg font-semibold text-white">Audio Control</h2>
 
         <div className="space-y-4">

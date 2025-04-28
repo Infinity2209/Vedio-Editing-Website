@@ -58,7 +58,7 @@ export default function ImageOverlay() {
   const selectedOverlay = overlays.find(o => o.id === selectedOverlayId);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 mx-5">
       <h2 className="text-lg font-semibold text-white">Image Overlay</h2>
       
       <div className="p-4 bg-slate-800 rounded-lg">
