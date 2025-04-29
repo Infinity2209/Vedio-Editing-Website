@@ -155,7 +155,7 @@ export default function AudioControl() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="space-y-6 mx-5">
+      <div className="space-y-6 m-5">
         <h2 className="text-lg font-semibold text-white">Audio Control</h2>
 
         <div className="space-y-4">

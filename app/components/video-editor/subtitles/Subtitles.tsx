@@ -40,7 +40,7 @@ export default function Subtitles() {
   };
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 h-full">
+    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 m-2">
       <div className="md:col-span-3 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">Subtitles</h2>

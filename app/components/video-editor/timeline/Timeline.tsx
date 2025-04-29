@@ -100,9 +100,9 @@ export default function Timeline() {
   };
 
   return (
-    <div className="space-y-2 mb-5">
+    <div className="space-y-2 mb-2">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-sm font-medium ml-5 mt-5 text-white">Timeline</h3>
+        <h2 className="text-lg font-semibold text-white">Timeline</h2>
 
         <div className="flex items-center space-x-2 mr-5">
           <span className="text-xs text-white">Zoom:</span>
