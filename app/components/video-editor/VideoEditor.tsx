@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import Preview from './preview/Preview';
 import Timeline from './timeline/Timeline';
 import UploadSection from './upload/UploadSection';
@@ -46,43 +48,45 @@ export default function VideoEditor() {
         </div>
       )}
 
-      <div className="flex flex-col h-full max-w-8xl mx-auto p-4 bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 animate-gradient-x rounded-lg shadow-lg">
-        {/* Button to open UploadSection modal */}
-        <div className="mb-4">
-          <button
-            onClick={() => setShowUpload(true)}
-            className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
-          >
-            Upload Media
-          </button>
-        </div>
+      <DndProvider backend={HTML5Backend}>
+        <div className="flex flex-col h-full max-w-8xl mx-auto p-4 bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 animate-gradient-x rounded-lg shadow-lg">
+          {/* Button to open UploadSection modal */}
+          <div className="mb-4">
+            <button
+              onClick={() => setShowUpload(true)}
+              className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Upload Media
+            </button>
+          </div>
 
-        {/* Main content area */}
-        <div className="flex flex-1 gap-4 h-full">
-          {/* Left sidebar: ImageOverlay */}
-          <aside className="w-64 bg-white bg-opacity-20 rounded p-2 overflow-visible">
-            <ImageOverlay />
-            <AudioControl />
-          </aside>
+          {/* Main content area */}
+          <div className="flex flex-1 gap-4 h-full">
+            {/* Left sidebar: ImageOverlay */}
+            <aside className="w-64 bg-white bg-opacity-20 rounded p-2 overflow-visible">
+              <ImageOverlay />
+              <AudioControl />
+            </aside>
 
-          {/* Right main area: Preview and Subtitles stacked */}
-          <div className="flex flex-col flex-1 gap-4">
-            <main className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col">
-              <Preview />
-            </main>
+            {/* Right main area: Preview and Subtitles stacked */}
+            <div className="flex flex-col flex-1 gap-4">
+              <main className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col">
+                <Preview />
+              </main>
 
-            {/* Subtitles section */}
-            <section className="h-78 bg-white bg-opacity-30 rounded p-4 overflow-visible">
-              <Timeline />
-            </section>
+              {/* Subtitles section */}
+              <section className="h-78 bg-white bg-opacity-30 rounded p-4 overflow-visible">
+                <Timeline />
+              </section>
 
-            {/* Bottom controls: Timeline and AudioControl side by side */}
-            <footer className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col overflow-visible">
-              <Subtitles />
-            </footer>
+              {/* Bottom controls: Timeline and AudioControl side by side */}
+              <footer className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col overflow-visible">
+                <Subtitles />
+              </footer>
+            </div>
           </div>
         </div>
-      </div>
+      </DndProvider>
     </>
   );
 }

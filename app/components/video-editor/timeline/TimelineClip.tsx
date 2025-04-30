@@ -100,7 +100,7 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
     <div
       ref={ref}
       className={`
-        flex items-center p-2 rounded cursor-move transition-colors
+        flex flex-col cursor-move transition-colors rounded
         ${isSelected ? 'bg-blue-900/30 border border-blue-500' : 'bg-slate-800 hover:bg-slate-700'}
         ${isDragging ? 'opacity-50' : 'opacity-100'}
       `}
@@ -112,49 +112,56 @@ export default function TimelineClip({ clip, index, isSelected, onSelect, moveCl
       onDragStart={(e) => e.preventDefault()}
       data-handler-id={handlerId}
     >
-      <div className="w-12 flex-shrink-0">
-        <div className="w-10 h-6 bg-slate-700 rounded overflow-hidden">
+      {/* Timeline clip box with thumbnail and name */}
+      <div className="flex items-center p-2 h-16 bg-slate-700 rounded-t overflow-hidden">
+        <div className="w-24 h-full rounded overflow-hidden flex-shrink-0">
           {clip.thumbnail && (
-            <img src={clip.thumbnail} alt="Clip thumbnail" className="w-full h-full object-cover" draggable={false} onDragStart={(e) => e.preventDefault()} />
+            <img
+              src={clip.thumbnail}
+              alt="Clip thumbnail"
+              className="w-full h-full object-cover"
+              draggable={false}
+              onDragStart={(e) => e.preventDefault()}
+            />
           )}
+        </div>
+        <div className="flex-grow relative ml-4 flex items-center h-full">
+          <div
+            className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30 rounded"
+            style={{ width: `${clip.duration / 10 * 100}%` }}
+          />
+          <span className="relative text-white text-sm font-semibold">
+            {clip.name || `Clip ${index + 1}`}
+          </span>
         </div>
       </div>
 
-      <div className="flex-grow h-6 bg-slate-700 rounded overflow-hidden relative">
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-blue-500/30 to-blue-600/30"
-          style={{ width: `${clip.duration / 10 * 100}%` }}
-        />
-        <span className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs text-white">
-          {clip.name || `Clip ${index + 1}`}
-        </span>
-      </div>
-
-      <div className="ml-4 flex space-x-1">
+      {/* Buttons below the timeline clip box */}
+      <div className="flex justify-center space-x-3 p-2 bg-slate-800 rounded-b">
         <button
           onClick={handleAddScene}
-          className="bg-green-600 hover:bg-green-700 text-white text-xs px-2 py-1 rounded"
+          className="bg-green-600 hover:bg-green-700 text-white text-xs px-3 py-1 rounded"
           title="Add Scene"
         >
           Add Scene
         </button>
         <button
           onClick={handleRemoveScene}
-          className="bg-red-600 hover:bg-red-700 text-white text-xs px-2 py-1 rounded"
+          className="bg-red-600 hover:bg-red-700 text-white text-xs px-3 py-1 rounded"
           title="Remove Scene"
         >
           Remove Scene
         </button>
         <button
           onClick={handleCut}
-          className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-2 py-1 rounded"
+          className="bg-yellow-600 hover:bg-yellow-700 text-white text-xs px-3 py-1 rounded"
           title="Cut"
         >
           Cut
         </button>
         <button
           onClick={handleEdit}
-          className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-2 py-1 rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1 rounded"
           title="Edit"
         >
           Edit

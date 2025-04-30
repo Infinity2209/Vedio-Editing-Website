@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, ChangeEvent, DragEvent, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { addVideo } from "../../../lib/redux/slices/videoSlice";
+import { addClip, addVideo } from "../../../lib/redux/slices/videoSlice";
+import { v4 as uuidv4 } from 'uuid';
 
 interface FileWithPreview extends File {
   preview: string;
@@ -44,7 +45,16 @@ const Upload: React.FC<UploadProps> = ({ onUploadComplete }) => {
           const newProgress = (prev[file.name] || 0) + 10;
           if (newProgress >= 100) {
             clearInterval(interval);
+            // Dispatch addVideo with video URL for Preview
             dispatch(addVideo(file.preview));
+            // Dispatch addClip with clip object for Timeline
+            const clip = {
+              id: uuidv4(),
+              name: file.name,
+              duration: 60, // mock duration 60 seconds
+              thumbnail: file.preview,
+            };
+            dispatch(addClip(clip));
             return { ...prev, [file.name]: 100 };
           }
           return { ...prev, [file.name]: newProgress };

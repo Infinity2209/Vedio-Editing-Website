@@ -8,7 +8,7 @@ interface Clip {
 }
 
 interface VideoState {
-  videos: string[]; // list of video URLs or IDs
+  videos: string[];
   videoClips: Clip[];
   selectedClipId: string | null;
   currentTime: number;
@@ -23,7 +23,7 @@ const initialState: VideoState = {
   duration: 0,
 };
 
-const videoSlice = createSlice({
+export const videoSlice = createSlice({
   name: 'video',
   initialState,
   reducers: {
@@ -31,17 +31,20 @@ const videoSlice = createSlice({
       state.videos.push(action.payload);
     },
     removeVideo(state, action: PayloadAction<string>) {
-      state.videos = state.videos.filter(video => video !== action.payload);
+      state.videos = state.videos.filter((video) => video !== action.payload);
     },
     setVideoClips(state, action: PayloadAction<Clip[]>) {
       state.videoClips = action.payload;
+    },
+    addClip(state, action: PayloadAction<Clip>) {
+      state.videoClips.push(action.payload);
     },
     moveClip(state, action: PayloadAction<{ fromIndex: number; toIndex: number }>) {
       const { fromIndex, toIndex } = action.payload;
       const [movedClip] = state.videoClips.splice(fromIndex, 1);
       state.videoClips.splice(toIndex, 0, movedClip);
     },
-    selectClip(state, action: PayloadAction<string | null>) {
+    selectClip(state, action: PayloadAction<string>) {
       state.selectedClipId = action.payload;
     },
     setCurrentTime(state, action: PayloadAction<number>) {
@@ -74,6 +77,7 @@ export const {
   addVideo,
   removeVideo,
   setVideoClips,
+  addClip,
   moveClip,
   selectClip,
   setCurrentTime,
@@ -81,4 +85,5 @@ export const {
   addScene,
   removeScene,
 } = videoSlice.actions;
+
 export default videoSlice.reducer;
