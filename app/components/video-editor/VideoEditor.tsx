@@ -46,7 +46,7 @@ export default function VideoEditor() {
         </div>
       )}
 
-      <div className="flex flex-col h-full max-w-7xl mx-auto p-4 bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 animate-gradient-x rounded-lg shadow-lg">
+      <div className="flex flex-col h-full max-w-8xl mx-auto p-4 bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-400 animate-gradient-x rounded-lg shadow-lg">
         {/* Button to open UploadSection modal */}
         <div className="mb-4">
           <button
@@ -60,33 +60,25 @@ export default function VideoEditor() {
         {/* Main content area */}
         <div className="flex flex-1 gap-4 h-full">
           {/* Left sidebar: ImageOverlay */}
-          <aside className="w-64 bg-white bg-opacity-20 backdrop-blur-sm rounded p-2 overflow-auto gap-10">
+          <aside className="w-64 bg-white bg-opacity-20 rounded p-2 overflow-visible">
             <ImageOverlay />
             <AudioControl />
           </aside>
 
-          {/* Right main area: Preview, Timeline, and controls */}
+          {/* Right main area: Preview and Subtitles stacked */}
           <div className="flex flex-col flex-1 gap-4">
-            {/* Preview section */}
-            <main className="flex-1 bg-white bg-opacity-30 backdrop-blur-sm rounded p-2 flex flex-col">
-              <div className="flex-1 overflow-hidden rounded">
-                <Preview />
-              </div>
-
-              {/* Example usage of formatTime */}
-              <div className="text-white mt-2">
-                {formatTime(currentTime)} / {formatTime(duration)}
-              </div>
+            <main className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col">
+              <Preview />
             </main>
 
-            {/* Timeline section (moved from footer) */}
-            <section className="h-68 bg-white bg-opacity-30 backdrop-blur-sm rounded p-2 overflow-auto">
+            {/* Subtitles section */}
+            <section className="h-78 bg-white bg-opacity-30 rounded p-4 overflow-visible">
               <Timeline />
             </section>
 
-            {/* Bottom controls: Subtitles and AudioControl side by side */}
-            <footer className="h-70 bg-white bg-opacity-30 backdrop-blur-sm rounded p-2 overflow-auto">
-                <Subtitles />
+            {/* Bottom controls: Timeline and AudioControl side by side */}
+            <footer className="flex-1 bg-white bg-opacity-30 rounded p-2 flex flex-col overflow-visible">
+              <Subtitles />
             </footer>
           </div>
         </div>
