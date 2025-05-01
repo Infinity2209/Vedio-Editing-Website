@@ -1,80 +1,54 @@
 # Video Editor Frontend
 
-This is a video editor frontend application built with Next.js, React, Redux Toolkit, and Tailwind CSS. It provides features such as video upload, timeline editing, subtitles, image overlays, audio control, and exporting the edited video.
+This project is a React/Next.js based video editor frontend application with Redux state management. It supports uploading video files, previewing videos, and editing video timelines with features such as adding/removing scenes, drag-and-drop clip rearranging, and mock cut/edit functionality.
 
-## Prerequisites
+## Features
 
-- Node.js (version 16 or higher recommended)
-- npm (comes with Node.js) or yarn
+- Upload video files in mp4, webm, and ogg formats with drag & drop or file selector.
+- Video preview with play, pause, stop, fullscreen, render simulation, and download.
+- Timeline view showing video clips with thumbnails and durations.
+- Timeline clip controls: Add Scene, Remove Scene, Cut, Edit (mock implementations).
+- Drag-and-drop reordering of timeline clips.
+- Redux state management for videos, clips, current time, and duration.
+- Responsive UI with Tailwind CSS styling.
 
 ## Installation
 
-1. Clone the repository or download the source code.
-2. Navigate to the project directory:
-   ```bash
-   cd video-editor-frontend
-   ```
-3. Install the dependencies:
-   ```bash
-   npm install
-   ```
-   or if you use yarn:
-   ```bash
-   yarn install
-   ```
-
-## Running the Application
-
-### Development Mode
-
-To start the development server with hot-reloading:
-
-```bash
-npm run dev
-```
-
-Open your browser and go to [http://localhost:3000](http://localhost:3000) to view the app.
-
-### Production Mode
-
-To build the application for production:
-
-```bash
-npm run build
-```
-
-To start the production server:
-
-```bash
-npm start
-```
+1. Clone the repository.
+2. Run `npm install` to install dependencies.
+3. Run `npm run dev` to start the development server.
+4. Open `http://localhost:3000` in your browser.
 
 ## Usage
 
-- Upload videos using the upload section.
-- Edit the video timeline, add subtitles, and image overlays.
-- Control audio settings.
-- Export the final edited video using the export feature.
+- Upload videos using the Upload section.
+- Preview videos in the preview panel.
+- Use the timeline to manage clips and scenes.
+- Use the timeline buttons below each clip to add/remove scenes or perform mock cut/edit.
+- Drag clips in the timeline to reorder them.
 
-## Project Structure
+## Notes
 
-- `app/` - Contains the main Next.js app components and pages.
-- `app/components/video-editor/` - Core video editor components like timeline, subtitles, preview, upload, export, etc.
-- `app/components/ui/` - Reusable UI components such as buttons, inputs, sliders, tabs, etc.
-- `app/lib/redux/` - Redux store and slices for managing application state.
-- `app/globals.css` - Global styles including Tailwind CSS imports.
-- `tailwind.config.js` - Tailwind CSS configuration.
+- The cut and edit functions are currently mock implementations and show alerts.
+- The render function simulates rendering progress and allows downloading a dummy video file.
+- The project uses `react-dnd` for drag-and-drop functionality; ensure the DndProvider wraps the editor components.
 
-## Technologies Used
+## Dependencies
 
-- Next.js
-- React
+- React 18+
+- Next.js 13+
 - Redux Toolkit
-- Tailwind CSS
-- TypeScript
-- React DnD
-- React Player
+- react-redux
+- react-dnd
+- react-dnd-html5-backend
+- uuid
+
+## Development
+
+- The Redux slices are located in `app/lib/redux/slices/`.
+- Components are organized under `app/components/video-editor/`.
+- Styling is done with Tailwind CSS.
 
 ## License
 
-This project is private and not licensed for public use.
+MIT License
